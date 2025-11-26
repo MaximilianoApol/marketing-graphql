@@ -1,0 +1,35 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+    findAllPublications: [PublicationResponse]
+}
+
+type Mutation {
+    updatePublication(publicationApiId: Int!, req: PublicationRequest): PublicationResponse!
+}
+
+type PublicationResponse {
+    publicationApiId: Int
+    textContent: String
+    publicationDate: String
+    likes: Int
+    comments: Int
+    shares: Int
+    publicationUrl: String
+    classificationPriority: String
+    collectionDate: String
+}
+
+input PublicationRequest {
+    textContent: String
+    publicationDate: String
+    likes: Int
+    comments: Int
+    shares: Int
+    geolocation: String
+    publicationUrl: String
+    classificationPriority: String
+}
