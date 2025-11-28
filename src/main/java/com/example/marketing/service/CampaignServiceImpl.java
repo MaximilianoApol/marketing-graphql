@@ -24,6 +24,7 @@ public class CampaignServiceImpl implements CampaignService {
 	private final CampaignRepository repository;
 	private final UserRepository userRepository;
 
+	@SuppressWarnings("null")
 	@Override
     public CampaignResponseDTO create(CampaignRequestDTO request) {
         User creator = userRepository.findById(request.creatorUserId())
@@ -34,6 +35,7 @@ public class CampaignServiceImpl implements CampaignService {
         return CampaignMapper.toResponse(entity);
     }
 
+	@SuppressWarnings("null")
 	@Override
 	public CampaignResponseDTO update(Integer id, CampaignRequestDTO request) {
 		Campaign existing = repository.findById(id)
@@ -47,6 +49,7 @@ public class CampaignServiceImpl implements CampaignService {
 
 	@Override
 	public CampaignResponseDTO getById(Integer id) {
+		@SuppressWarnings("null")
 		Campaign entity = repository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Campaign not found"));
 		return CampaignMapper.toResponse(entity);
@@ -61,12 +64,14 @@ public class CampaignServiceImpl implements CampaignService {
 	}
 
 
+	@SuppressWarnings("null")
 	@Override
 	public Page<CampaignResponseDTO> getAllPaged(Pageable pageable) {
 		return repository.findAll(pageable)
 				.map(CampaignMapper::toResponse);
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public Page<CampaignResponseDTO> searchByName(String name, Pageable pageable) {
 		return repository.searchByName(name)
@@ -78,6 +83,7 @@ public class CampaignServiceImpl implements CampaignService {
 				));
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public Page<CampaignResponseDTO> findActiveDuring(OffsetDateTime now, Pageable pageable) {
 		List<CampaignResponseDTO> list = repository.findActiveDuring(now)

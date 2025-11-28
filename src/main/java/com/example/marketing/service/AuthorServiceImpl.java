@@ -25,6 +25,7 @@ public class AuthorServiceImpl implements AuthorService {
 	private final AuthorRepository authorRepository;
 	private final AuthorMapper mapper;
 
+	@SuppressWarnings("null")
 	@Override
 	public AuthorResponseDTO create(AuthorRequestDTO request) {
 		Author entity = mapper.toEntity(request);
@@ -32,6 +33,7 @@ public class AuthorServiceImpl implements AuthorService {
 		return mapper.toResponse(entity);
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	public AuthorResponseDTO update(Integer id, AuthorRequestDTO request) {
 		Author existing = authorRepository.findById(id)
@@ -45,6 +47,7 @@ public class AuthorServiceImpl implements AuthorService {
 
 	@Override
 	public AuthorResponseDTO findById(Integer id) {
+		@SuppressWarnings("null")
 		Author entity = authorRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Author no encontrado"));
 

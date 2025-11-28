@@ -9,39 +9,40 @@ import java.util.List;
 
 public interface TextAnalysisRepository extends JpaRepository<TextAnalysis, Integer> {
 
-	boolean existsByPublication_PublicationId(Integer publicationId);
+    // CORRECCIÓN: Usar 'PublicationApiId' en lugar de 'PublicationId'
+    boolean existsByPublication_PublicationApiId(Integer publicationId);
 
-	@Query("""
-			    SELECT t
-			    FROM TextAnalysis t
-			    WHERE t.sentiment = :sentiment
-			    ORDER BY t.sentimentConfidenceScore DESC
-			""")
-	List<TextAnalysis> findBySentimentOrderByConfidence(String sentiment);
+    @Query("""
+                SELECT t
+                FROM TextAnalysis t
+                WHERE t.sentiment = :sentiment
+                ORDER BY t.sentimentConfidenceScore DESC
+            """)
+    List<TextAnalysis> findBySentimentOrderByConfidence(String sentiment);
 
-	@Query("""
-			    SELECT t
-			    FROM TextAnalysis t
-			    WHERE t.crisisScore >= :minScore
-			    ORDER BY t.crisisScore DESC
-			""")
-	List<TextAnalysis> findHighRiskAnalyses(BigDecimal minScore);
+    @Query("""
+                SELECT t
+                FROM TextAnalysis t
+                WHERE t.crisisScore >= :minScore
+                ORDER BY t.crisisScore DESC
+            """)
+    List<TextAnalysis> findHighRiskAnalyses(BigDecimal minScore);
 
-	@Query("""
-			    SELECT t
-			    FROM TextAnalysis t
-			    JOIN t.publication p
-			    WHERE p.campaign.campaignId = :campaignId
-			    ORDER BY t.analysisDate DESC
-			""")
-	List<TextAnalysis> findByCampaignId(Integer campaignId);
+    @Query("""
+                SELECT t
+                FROM TextAnalysis t
+                JOIN t.publication p
+                WHERE p.campaign.campaignId = :campaignId
+                ORDER BY t.analysisDate DESC
+            """)
+    List<TextAnalysis> findByCampaignId(Integer campaignId);
 
 
-	@Query("""
-			    SELECT t
-			    FROM TextAnalysis t
-			    WHERE t.detectedLanguage = :lang
-			    ORDER BY t.analysisDate DESC
-			""")
-	List<TextAnalysis> findByLanguage(String lang);
+    @Query("""
+                SELECT t
+                FROM TextAnalysis t
+                WHERE t.detectedLanguage = :lang
+                ORDER BY t.analysisDate DESC
+            """)
+    List<TextAnalysis> findByLanguage(String lang);
 }

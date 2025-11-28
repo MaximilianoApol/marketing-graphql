@@ -1,13 +1,10 @@
-package com.example.marketing.model; // O donde pongas tus modelos
+package com.example.marketing.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-// import org.springframework.security.core.GrantedAuthority;
-// import org.springframework.security.core.authority.SimpleGrantedAuthority;
-// import org.springframework.security.core.userdetails.UserDetails;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
@@ -19,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User /*implements UserDetails*/ { // <-- ¡IMPORTANTE!
+public class User implements UserDetails { // <--- 1. DESCOMENTAR implements
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +30,7 @@ public class User /*implements UserDetails*/ { // <-- ¡IMPORTANTE!
     private String email;
 
     @Column(name = "password_hash", length = 255, nullable = false)
-    private String password; // El campo se llama 'password' para que Spring lo entienda
+    private String password;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
@@ -41,46 +38,37 @@ public class User /*implements UserDetails*/ { // <-- ¡IMPORTANTE!
     @Column(name = "creation_date", nullable = false)
     private OffsetDateTime creationDate;
 
-    // --- Relación: Muchos Usuarios tienen Un Rol ---
-    @ManyToOne(fetch = FetchType.EAGER) // EAGER es útil para cargar el rol con el usuario
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    // --- MÉTODOS REQUERIDOS POR UserDetails ---
+    // --- 2. AGREGAR ESTOS MÉTODOS (O DESCOMENTARLOS) ---
 
-    // @Override
-    // public Collection<? extends GrantedAuthority> getAuthorities() {
-    //     // Aquí le decimos a Spring Security qué rol tiene el usuario
-    //     return List.of(new SimpleGrantedAuthority(role.getRoleName()));
-    // }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Asumiendo que Role tiene un campo "roleName"
+        return List.of(new SimpleGrantedAuthority(role.getRoleName()));
+    }
 
-    // @Override
-    // public String getPassword() {
-    //     return password; // Devuelve el hash de la contraseña
-    // }
+    @Override
+    public String getUsername() {
+        return email;
+    }
 
-    // @Override
-    // public String getUsername() {
-    //     return email; // Usamos el email como "username" para el login
-    // }
+    @Override
+    public String getPassword() {
+        return password;
+    }
 
-    // @Override
-    // public boolean isAccountNonExpired() {
-    //     return true; // Asumimos que las cuentas no expiran
-    // }
+    @Override
+    public boolean isAccountNonExpired() { return true; }
 
-    // @Override
-    // public boolean isAccountNonLocked() {
-    //     return true; // Asumimos que no se bloquean
-    // }
+    @Override
+    public boolean isAccountNonLocked() { return true; }
 
-    // @Override
-    // public boolean isCredentialsNonExpired() {
-    //     return true; // Asumimos que las credenciales no expiran
-    // }
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
 
-    // @Override
-    // public boolean isEnabled() {
-    //     return isActive; // Usamos el campo 'is_active' de nuestra BD
-    // }
+    @Override
+    public boolean isEnabled() { return isActive; }
 }

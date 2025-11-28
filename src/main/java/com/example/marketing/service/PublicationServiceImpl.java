@@ -39,10 +39,12 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     public PublicationResponseDTO create(PublicationRequestDTO request) {
         // 1. Buscar Campaña
+        @SuppressWarnings("null")
         Campaign campaign = campaignRepository.findById(request.campaignId())
              .orElseThrow(() -> new EntityNotFoundException("Campaña no encontrada"));
 
         // 2. Buscar Autor
+        @SuppressWarnings("null")
         Author author = authorRepository.findById(request.authorId())
              .orElseThrow(() -> new EntityNotFoundException("Autor no encontrado"));
 
@@ -57,6 +59,7 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     @Transactional(readOnly = true)
     public PublicationResponseDTO findById(Integer publicationId) {
+        @SuppressWarnings("null")
         Publication publication = publicationRepository.findById(publicationId)
                 .orElseThrow(() -> new EntityNotFoundException("Publicación no encontrada con ID: " + publicationId));
         return PublicationMapper.toResponseDTO(publication);
@@ -73,19 +76,23 @@ public class PublicationServiceImpl implements PublicationService {
     @Override
     @Transactional(readOnly = true)
     public Page<PublicationResponseDTO> getAllPublications(Pageable pageable) {
+        @SuppressWarnings("null")
         Page<Publication> publicationPage = publicationRepository.findAll(pageable);
         return publicationPage.map(PublicationMapper::toResponseDTO);
     }
 
     @Override
     public PublicationResponseDTO update(Integer publicationId, PublicationRequestDTO request) {
+        @SuppressWarnings("null")
         Publication existingPublication = publicationRepository.findById(publicationId)
                 .orElseThrow(() -> new EntityNotFoundException("Publicación no encontrada con ID: " + publicationId));
         PublicationMapper.copyToEntity(request, existingPublication);
+        @SuppressWarnings("null")
         Publication savedPublication = publicationRepository.save(existingPublication);
         return PublicationMapper.toResponseDTO(savedPublication);
     }
 
+    @SuppressWarnings("null")
     @Override
     public void delete(Integer publicationId) {
         if (!publicationRepository.existsById(publicationId)) {
