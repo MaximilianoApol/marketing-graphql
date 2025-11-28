@@ -4,8 +4,6 @@ import com.example.marketing.dto.CampaignRequestDTO;
 import com.example.marketing.dto.CampaignResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.time.OffsetDateTime;
 import java.util.List;
 
 public interface CampaignService {
@@ -22,5 +20,6 @@ public interface CampaignService {
 
 	Page<CampaignResponseDTO> searchByName(String name, Pageable pageable);
 
-	Page<CampaignResponseDTO> findActiveDuring(OffsetDateTime now, Pageable pageable);
+	// Método para buscar campañas por su estado 'is_active'
+	Page<CampaignResponseDTO> findByIsActive(boolean isActive, Pageable pageable);
 }

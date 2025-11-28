@@ -56,13 +56,13 @@ public class CampaignGraphQLController {
 
 	@QueryMapping(name = "findActiveCampaigns")
 	public Page<CampaignResponseDTO> findActiveCampaigns(
-			@Argument String now,
+			@Argument boolean isActive, // CORREGIDO: Ahora recibe un booleano (isActive)
 			@Argument int page,
 			@Argument int size
 	) {
-		log.info("GraphQL Query → findActiveCampaigns(now={}, page={}, size={})", now, page, size);
-		OffsetDateTime date = OffsetDateTime.parse(now);
-		return campaignService.findActiveDuring(date, PageRequest.of(page, size));
+		log.info("GraphQL Query → findActiveCampaigns(isActive={}, page={}, size={})", isActive, page, size);
+		// Llama al nuevo método del servicio
+		return campaignService.findByIsActive(isActive, PageRequest.of(page, size));
 	}
 
 

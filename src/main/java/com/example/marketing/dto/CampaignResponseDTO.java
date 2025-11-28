@@ -9,12 +9,10 @@ import java.time.OffsetDateTime;
 public class CampaignResponseDTO {
 	private Integer campaignId;
 	private String name;
-	private String description;
-	private String status;
-	private OffsetDateTime startDate;
-	private OffsetDateTime endDate;
-	private OffsetDateTime createdAt;
-	private OffsetDateTime updatedAt;
+
+	// Propiedades según el modelo corregido:
+	private Boolean isActive;
+	private OffsetDateTime creationDate;
 
 	private UserResponseDTO creatorUser;
 }

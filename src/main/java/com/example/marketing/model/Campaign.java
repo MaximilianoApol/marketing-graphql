@@ -17,29 +17,21 @@ public class Campaign {
 	@Column(name = "campaign_id")
 	private Integer campaignId;
 
-	@Column(name = "name", length = 150, nullable = false)
+	// 1. CORRECCIÓN: 'name' debe mapearse a 'campaign_name'
+	@Column(name = "campaign_name", length = 100, nullable = false)
 	private String name;
 
-	@Column(name = "description", length = 500)
-	private String description;
+	// 2. CORRECCIÓN: 'created_at' (el que causa el error) debe mapearse a 'creation_date'
+	@Column(name = "creation_date", columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false)
+	private OffsetDateTime creationDate;
 
-	@Column(name = "status", length = 30, nullable = false)
-	private String status;
-	// Ejemplos: ACTIVE, PAUSED, FINISHED
+	// 3. ADICIÓN: Mapear la columna 'is_active' que existe en la BD
+	@Column(name = "is_active", nullable = false)
+	private Boolean isActive;
 
-	@Column(name = "start_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
-	private OffsetDateTime startDate;
 
-	@Column(name = "end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
-	private OffsetDateTime endDate;
-
-	@Column(name = "created_at", columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false)
-	private OffsetDateTime createdAt;
-
-	@Column(name = "updated_at", columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false)
-	private OffsetDateTime updatedAt;
-
+	// 5. Relación con User (Mantenida)
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "creator_user_id", nullable = false)
-    private User creatorUser;
+	@JoinColumn(name = "creator_user_id", nullable = false)
+	private User creatorUser;
 }

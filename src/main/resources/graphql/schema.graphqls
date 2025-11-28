@@ -15,7 +15,7 @@ type Query {
     getAllCampaigns: [CampaignResponse]
     getCampaignsPaged(page: Int!, size: Int!): CampaignPage
     searchCampaignByName(name: String!, page: Int!, size: Int!): CampaignPage
-    findActiveCampaigns(now: String!, page: Int!, size: Int!): CampaignPage
+    findActiveCampaigns(isActive: Boolean!, page: Int!, size: Int!): CampaignPage
 
     # --- PUBLICATIONS ---
     findPublicationById(id: Int!): PublicationResponse
@@ -84,22 +84,15 @@ input AuthorRequest {
 type CampaignResponse {
     campaignId: Int
     name: String
-    description: String
-    status: String
-    startDate: String
-    endDate: String
-    createdAt: String
-    updatedAt: String
-    creatorUser: UserResponse # Relación con User
+    isActive: Boolean
+    creationDate: String
+    creatorUser: UserResponse
 }
 
 input CampaignRequest {
     name: String!
-    description: String
-    status: String!
-    startDate: String
-    endDate: String
-    creatorUserId: Int!       # Nuevo campo obligatorio para vincular usuario
+    creatorUserId: Int!
+    isActive: Boolean
 }
 
 type CampaignPage {
