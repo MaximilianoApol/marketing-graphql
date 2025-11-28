@@ -31,7 +31,6 @@ public class TextAnalysisServiceImpl implements TextAnalysisService {
     @Override
     public TextAnalysisResponseDTO create(TextAnalysisRequestDTO request) {
 
-        @SuppressWarnings("null")
         Publication publication = publicationRepo.findById(request.publicationId())
                 .orElseThrow(() -> new EntityNotFoundException("Publication no encontrada"));
 
@@ -50,7 +49,6 @@ public class TextAnalysisServiceImpl implements TextAnalysisService {
     @Override
     public TextAnalysisResponseDTO update(Integer id, TextAnalysisRequestDTO request) {
 
-        @SuppressWarnings("null")
         TextAnalysis existing = repo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("TextAnalysis no encontrado"));
 
