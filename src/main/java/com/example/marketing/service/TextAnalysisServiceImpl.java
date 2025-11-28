@@ -24,75 +24,83 @@ import java.util.List;
 @Transactional
 public class TextAnalysisServiceImpl implements TextAnalysisService {
 
-	private final TextAnalysisRepository repo;
-	private final PublicationRepository publicationRepo;
+    private final TextAnalysisRepository repo;
+    private final PublicationRepository publicationRepo;
 
-	@Override
-	public TextAnalysisResponseDTO create(TextAnalysisRequestDTO request) {
+    @SuppressWarnings("null")
+    @Override
+    public TextAnalysisResponseDTO create(TextAnalysisRequestDTO request) {
 
-		Publication publication = publicationRepo.findById(request.publicationId())
-				.orElseThrow(() -> new EntityNotFoundException("Publication no encontrada"));
+        Publication publication = publicationRepo.findById(request.publicationId())
+                .orElseThrow(() -> new EntityNotFoundException("Publication no encontrada"));
 
-		if (repo.existsByPublication_PublicationApiId(request.publicationId())) {
-			throw new IllegalStateException("Ya existe un análisis para esta publicación");
-		}
+        // CORRECCIÓN AQUÍ: Llamar al método renombrado
+        if (repo.existsByPublication_PublicationApiId(request.publicationId())) {
+            throw new IllegalStateException("Ya existe un análisis para esta publicación");
+        }
 
-		TextAnalysis entity = TextAnalysisMapper.toEntity(request, publication);
-		repo.save(entity);
+        TextAnalysis entity = TextAnalysisMapper.toEntity(request, publication);
+        repo.save(entity);
 
-		return TextAnalysisMapper.toResponse(entity);
-	}
+        return TextAnalysisMapper.toResponse(entity);
+    }
 
-	@Override
-	public TextAnalysisResponseDTO update(Integer id, TextAnalysisRequestDTO request) {
+    @SuppressWarnings("null")
+    @Override
+    public TextAnalysisResponseDTO update(Integer id, TextAnalysisRequestDTO request) {
 
-		TextAnalysis existing = repo.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("TextAnalysis no encontrado"));
+        TextAnalysis existing = repo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("TextAnalysis no encontrado"));
 
-		TextAnalysisMapper.copyToEntity(request, existing);
-		repo.save(existing);
+        TextAnalysisMapper.copyToEntity(request, existing);
+        repo.save(existing);
 
-		return TextAnalysisMapper.toResponse(existing);
-	}
+        return TextAnalysisMapper.toResponse(existing);
+    }
 
-	@Override
-	public TextAnalysisResponseDTO findById(Integer id) {
-		TextAnalysis entity = repo.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("TextAnalysis no encontrado"));
+    @Override
+    public TextAnalysisResponseDTO findById(Integer id) {
+        @SuppressWarnings("null")
+        TextAnalysis entity = repo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("TextAnalysis no encontrado"));
 
-		return TextAnalysisMapper.toResponse(entity);
-	}
+        return TextAnalysisMapper.toResponse(entity);
+    }
 
 
-	@Override
-	public Page<TextAnalysisResponseDTO> findBySentiment(String sentiment, Pageable pageable) {
-		List<TextAnalysisResponseDTO> list = repo.findBySentimentOrderByConfidence(sentiment)
-				.stream().map(TextAnalysisMapper::toResponse).toList();
+    @SuppressWarnings("null")
+    @Override
+    public Page<TextAnalysisResponseDTO> findBySentiment(String sentiment, Pageable pageable) {
+        List<TextAnalysisResponseDTO> list = repo.findBySentimentOrderByConfidence(sentiment)
+                .stream().map(TextAnalysisMapper::toResponse).toList();
 
-		return new PageImpl<>(list, pageable, list.size());
-	}
+        return new PageImpl<>(list, pageable, list.size());
+    }
 
-	@Override
-	public Page<TextAnalysisResponseDTO> findByCampaign(Integer campaignId, Pageable pageable) {
-		List<TextAnalysisResponseDTO> list = repo.findByCampaignId(campaignId)
-				.stream().map(TextAnalysisMapper::toResponse).toList();
+    @SuppressWarnings("null")
+    @Override
+    public Page<TextAnalysisResponseDTO> findByCampaign(Integer campaignId, Pageable pageable) {
+        List<TextAnalysisResponseDTO> list = repo.findByCampaignId(campaignId)
+                .stream().map(TextAnalysisMapper::toResponse).toList();
 
-		return new PageImpl<>(list, pageable, list.size());
-	}
+        return new PageImpl<>(list, pageable, list.size());
+    }
 
-	@Override
-	public Page<TextAnalysisResponseDTO> findByLanguage(String lang, Pageable pageable) {
-		List<TextAnalysisResponseDTO> list = repo.findByLanguage(lang)
-				.stream().map(TextAnalysisMapper::toResponse).toList();
+    @SuppressWarnings("null")
+    @Override
+    public Page<TextAnalysisResponseDTO> findByLanguage(String lang, Pageable pageable) {
+        List<TextAnalysisResponseDTO> list = repo.findByLanguage(lang)
+                .stream().map(TextAnalysisMapper::toResponse).toList();
 
-		return new PageImpl<>(list, pageable, list.size());
-	}
+        return new PageImpl<>(list, pageable, list.size());
+    }
 
-	@Override
-	public Page<TextAnalysisResponseDTO> findHighRisk(BigDecimal minScore, Pageable pageable) {
-		List<TextAnalysisResponseDTO> list = repo.findHighRiskAnalyses(minScore)
-				.stream().map(TextAnalysisMapper::toResponse).toList();
+    @SuppressWarnings("null")
+    @Override
+    public Page<TextAnalysisResponseDTO> findHighRisk(BigDecimal minScore, Pageable pageable) {
+        List<TextAnalysisResponseDTO> list = repo.findHighRiskAnalyses(minScore)
+                .stream().map(TextAnalysisMapper::toResponse).toList();
 
-		return new PageImpl<>(list, pageable, list.size());
-	}
+        return new PageImpl<>(list, pageable, list.size());
+    }
 }

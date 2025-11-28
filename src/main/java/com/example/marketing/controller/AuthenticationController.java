@@ -26,11 +26,11 @@ public class AuthenticationController {
         return new ResponseEntity<>(authService.register(request), HttpStatus.CREATED);
     }
 
-    // @PostMapping("/login")
-    // public ResponseEntity<LoginResponse> login(
-    //         @Valid @RequestBody LoginRequestDTO request
-    // ) {
-    //     // Y LLAMAR A authService.login
-    //     return ResponseEntity.ok(authService.login(request));
-    // }
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(
+            @Valid @RequestBody LoginRequestDTO request
+    ) {
+        // Y LLAMAR A authService.login
+        return ResponseEntity.ok(authService.login(request));
+    }
 }
