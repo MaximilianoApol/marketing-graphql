@@ -9,7 +9,8 @@ import java.util.List;
 
 public interface TextAnalysisRepository extends JpaRepository<TextAnalysis, Integer> {
 
-	boolean existsByPublication_PublicationId(Integer publicationId);
+	// ✅ CORRECTO: Navega a la propiedad 'publicationApiId' del objeto 'publication'
+	boolean existsByPublication_PublicationApiId(Integer publicationApiId);
 
 	@Query("""
 			    SELECT t

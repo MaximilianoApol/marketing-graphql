@@ -33,7 +33,7 @@ public class TextAnalysisServiceImpl implements TextAnalysisService {
 		Publication publication = publicationRepo.findById(request.publicationId())
 				.orElseThrow(() -> new EntityNotFoundException("Publication no encontrada"));
 
-		if (repo.existsByPublication_PublicationId(request.publicationId())) {
+		if (repo.existsByPublication_PublicationApiId(request.publicationId())) {
 			throw new IllegalStateException("Ya existe un análisis para esta publicación");
 		}
 
