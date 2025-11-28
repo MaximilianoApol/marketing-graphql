@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Service
@@ -25,14 +23,14 @@ public class CampaignServiceImpl implements CampaignService {
 	private final UserRepository userRepository;
 
 	@Override
-    public CampaignResponseDTO create(CampaignRequestDTO request) {
-        User creator = userRepository.findById(request.creatorUserId())
-                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
-        Campaign entity = CampaignMapper.toEntity(request, creator);
-        
-        repository.save(entity);
-        return CampaignMapper.toResponse(entity);
-    }
+	public CampaignResponseDTO create(CampaignRequestDTO request) {
+		User creator = userRepository.findById(request.creatorUserId())
+				.orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+		Campaign entity = CampaignMapper.toEntity(request, creator);
+
+		repository.save(entity);
+		return CampaignMapper.toResponse(entity);
+	}
 
 	@Override
 	public CampaignResponseDTO update(Integer id, CampaignRequestDTO request) {
@@ -69,22 +67,13 @@ public class CampaignServiceImpl implements CampaignService {
 
 	@Override
 	public Page<CampaignResponseDTO> searchByName(String name, Pageable pageable) {
-		return repository.searchByName(name)
-				.stream()
-				.map(CampaignMapper::toResponse)
-				.collect(java.util.stream.Collectors.collectingAndThen(
-						java.util.stream.Collectors.toList(),
-						list -> new org.springframework.data.domain.PageImpl<>(list, pageable, list.size())
-				));
+		return repository.searchByName(name, pageable)
+				.map(CampaignMapper::toResponse);
 	}
 
 	@Override
-	public Page<CampaignResponseDTO> findActiveDuring(OffsetDateTime now, Pageable pageable) {
-		List<CampaignResponseDTO> list = repository.findActiveDuring(now)
-				.stream()
-				.map(CampaignMapper::toResponse)
-				.toList();
-
-		return new org.springframework.data.domain.PageImpl<>(list, pageable, list.size());
+	public Page<CampaignResponseDTO> findByIsActive(boolean isActive, Pageable pageable) {
+		return repository.findByIsActive(isActive, pageable)
+				.map(CampaignMapper::toResponse);
 	}
 }
