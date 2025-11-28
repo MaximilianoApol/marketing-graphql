@@ -1,15 +1,103 @@
 schema {
-  query: Query
-  mutation: Mutation
+    query: Query
+    mutation: Mutation
 }
 
 type Query {
+
+
+    getAuthorById(id: Int!): AuthorResponse
+    getAuthorsOrderByFollowers(page: Int!, size: Int!): [AuthorResponse]
+    getVerifiedAuthors(page: Int!, size: Int!): [AuthorResponse]
+    getPriorityInfluencers(page: Int!, size: Int!): [AuthorResponse]
+
+
+
+    getCampaignById(id: Int!): CampaignResponse
+    getAllCampaigns: [CampaignResponse]
+    getCampaignsPaged(page: Int!, size: Int!): CampaignPage
+    searchCampaignByName(name: String!, page: Int!, size: Int!): CampaignPage
+    findActiveCampaigns(now: String!, page: Int!, size: Int!): CampaignPage
+
+
+    findPublicationById(id: Int!): PublicationResponse
     findAllPublications: [PublicationResponse]
+    getAllPublicationsPaged(page: Int!, size: Int!): PublicationPage
+    findPotentialViralContent: [PublicationResponse]
+
+
+    getTextAnalysisById(id: Int!): TextAnalysisResponse
+    findTextAnalysisBySentiment(sentiment: String!, page: Int!, size: Int!): TextAnalysisPage
+    findTextAnalysisByCampaign(campaignId: Int!, page: Int!, size: Int!): TextAnalysisPage
+    findTextAnalysisByLanguage(language: String!, page: Int!, size: Int!): TextAnalysisPage
+    findHighRiskTextAnalysis(minScore: Float!, page: Int!, size: Int!): TextAnalysisPage
 }
 
 type Mutation {
-    updatePublication(publicationApiId: Int!, req: PublicationRequest): PublicationResponse!
+
+
+    createAuthor(req: AuthorRequest!): AuthorResponse!
+    updateAuthor(id: Int!, req: AuthorRequest!): AuthorResponse!
+
+    createCampaign(req: CampaignRequest!): CampaignResponse!
+    updateCampaign(id: Int!, req: CampaignRequest!): CampaignResponse!
+
+    createPublication(req: PublicationRequest!): PublicationResponse!
+    updatePublication(publicationId: Int!, req: PublicationRequest!): PublicationResponse!
+    deletePublication(publicationId: Int!): Boolean!
+
+    createTextAnalysis(req: TextAnalysisRequest!): TextAnalysisResponse!
+    updateTextAnalysis(id: Int!, req: TextAnalysisRequest!): TextAnalysisResponse!
 }
+
+
+
+type AuthorResponse {
+    authorId: Int
+    username: String
+    verified: Boolean
+    followerCount: Int
+    priority: Boolean
+}
+
+input AuthorRequest {
+    username: String!
+    verified: Boolean!
+    followerCount: Int
+    priority: Boolean!
+}
+
+
+
+type CampaignResponse {
+    campaignId: Int
+    name: String
+    description: String
+    status: String
+    startDate: String
+    endDate: String
+    createdAt: String
+    updatedAt: String
+}
+
+input CampaignRequest {
+    name: String!
+    description: String
+    status: String!
+    startDate: String
+    endDate: String
+}
+
+
+
+type CampaignPage {
+    content: [CampaignResponse]
+    totalElements: Int
+    totalPages: Int
+    pageNumber: Int
+}
+
+
 
 type PublicationResponse {
     publicationApiId: Int
@@ -18,9 +106,12 @@ type PublicationResponse {
     likes: Int
     comments: Int
     shares: Int
+    geolocation: String
     publicationUrl: String
     classificationPriority: String
     collectionDate: String
+
+    textAnalysis: TextAnalysisResponse
 }
 
 input PublicationRequest {
@@ -32,4 +123,42 @@ input PublicationRequest {
     geolocation: String
     publicationUrl: String
     classificationPriority: String
+}
+
+type PublicationPage {
+    content: [PublicationResponse]
+    totalElements: Int
+    totalPages: Int
+    pageNumber: Int
+}
+
+
+type TextAnalysisResponse {
+    analysisId: Int
+    sentiment: String
+    sentimentScore: Float
+    keywords: [String]
+    entities: [String]
+    toxicityLevel: String
+    language: String
+    campaignId: Int
+    publicationId: Int
+}
+
+input TextAnalysisRequest {
+    sentiment: String
+    sentimentScore: Float
+    keywords: [String]
+    entities: [String]
+    toxicityLevel: String
+    language: String
+    campaignId: Int
+    publicationId: Int!
+}
+
+type TextAnalysisPage {
+    content: [TextAnalysisResponse]
+    totalElements: Int
+    totalPages: Int
+    pageNumber: Int
 }

@@ -29,9 +29,6 @@ public class PublicationServiceImpl implements PublicationService {
 
     private final PublicationRepository publicationRepository;
 
-    // =======================================================
-    // === Implementación de Métodos CRUD ====================
-    // =======================================================
 
     @Override
     public PublicationResponseDTO create(PublicationRequestDTO request) {
