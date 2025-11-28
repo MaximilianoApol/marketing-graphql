@@ -4,6 +4,7 @@ import com.example.marketing.dto.CampaignRequestDTO;
 import com.example.marketing.dto.CampaignResponseDTO;
 import com.example.marketing.mapper.CampaignMapper;
 import com.example.marketing.model.Campaign;
+import com.example.marketing.model.User;
 import com.example.marketing.repository.CampaignRepository;
 import com.example.marketing.repository.UserRepository;
 
@@ -21,7 +22,7 @@ import java.util.List;
 public class CampaignServiceImpl implements CampaignService {
 
 	private final CampaignRepository repository;
-	private final }UserRepository userRepository;
+	private final UserRepository userRepository;
 
 	@Override
     public CampaignResponseDTO create(CampaignRequestDTO request) {
