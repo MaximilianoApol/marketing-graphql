@@ -23,5 +23,15 @@ public record PublicationRequestDTO(
 
         @Size(max = 512) String publicationUrl,
 
-        @Size(max = 50) String classificationPriority) {
+        @Size(max = 50) String classificationPriority
+
+
+        @NotNull(message = "El ID de la campaña es obligatorio")
+        Integer campaignId,
+
+        @NotNull(message = "El ID del autor es obligatorio")
+        Integer authorId
+
+
+) {
 }

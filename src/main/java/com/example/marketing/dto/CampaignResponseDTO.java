@@ -15,4 +15,6 @@ public class CampaignResponseDTO {
 	private OffsetDateTime endDate;
 	private OffsetDateTime createdAt;
 	private OffsetDateTime updatedAt;
+
+	private UserResponseDTO creatorUser;
 }

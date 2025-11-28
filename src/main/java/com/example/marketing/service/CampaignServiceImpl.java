@@ -5,6 +5,9 @@ import com.example.marketing.dto.CampaignResponseDTO;
 import com.example.marketing.mapper.CampaignMapper;
 import com.example.marketing.model.Campaign;
 import com.example.marketing.repository.CampaignRepository;
+import com.example.marketing.repository.UserRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,13 +21,17 @@ import java.util.List;
 public class CampaignServiceImpl implements CampaignService {
 
 	private final CampaignRepository repository;
+	private final }UserRepository userRepository;
 
 	@Override
-	public CampaignResponseDTO create(CampaignRequestDTO request) {
-		Campaign entity = CampaignMapper.toEntity(request);
-		repository.save(entity);
-		return CampaignMapper.toResponse(entity);
-	}
+    public CampaignResponseDTO create(CampaignRequestDTO request) {
+        User creator = userRepository.findById(request.creatorUserId())
+                .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
+        Campaign entity = CampaignMapper.toEntity(request, creator);
+        
+        repository.save(entity);
+        return CampaignMapper.toResponse(entity);
+    }
 
 	@Override
 	public CampaignResponseDTO update(Integer id, CampaignRequestDTO request) {

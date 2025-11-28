@@ -40,4 +40,11 @@ public class PublicationResponseDTO {
     
     @JsonProperty("collection Date")
     private OffsetDateTime collectionDate;
+
+    @JsonProperty("campaign")
+    private CampaignResponseDTO campaign;
+    
+    @JsonProperty("author")
+    private AuthorResponseDTO author;
+
 }

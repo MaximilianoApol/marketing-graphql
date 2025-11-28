@@ -4,28 +4,26 @@ schema {
 }
 
 type Query {
-
-
+    # --- AUTHORS ---
     getAuthorById(id: Int!): AuthorResponse
     getAuthorsOrderByFollowers(page: Int!, size: Int!): [AuthorResponse]
     getVerifiedAuthors(page: Int!, size: Int!): [AuthorResponse]
     getPriorityInfluencers(page: Int!, size: Int!): [AuthorResponse]
 
-
-
+    # --- CAMPAIGNS ---
     getCampaignById(id: Int!): CampaignResponse
     getAllCampaigns: [CampaignResponse]
     getCampaignsPaged(page: Int!, size: Int!): CampaignPage
     searchCampaignByName(name: String!, page: Int!, size: Int!): CampaignPage
     findActiveCampaigns(now: String!, page: Int!, size: Int!): CampaignPage
 
-
+    # --- PUBLICATIONS ---
     findPublicationById(id: Int!): PublicationResponse
     findAllPublications: [PublicationResponse]
     getAllPublicationsPaged(page: Int!, size: Int!): PublicationPage
     findPotentialViralContent: [PublicationResponse]
 
-
+    # --- TEXT ANALYSIS ---
     getTextAnalysisById(id: Int!): TextAnalysisResponse
     findTextAnalysisBySentiment(sentiment: String!, page: Int!, size: Int!): TextAnalysisPage
     findTextAnalysisByCampaign(campaignId: Int!, page: Int!, size: Int!): TextAnalysisPage
@@ -34,41 +32,55 @@ type Query {
 }
 
 type Mutation {
-
-
+    # --- AUTHORS ---
     createAuthor(req: AuthorRequest!): AuthorResponse!
     updateAuthor(id: Int!, req: AuthorRequest!): AuthorResponse!
 
+    # --- CAMPAIGNS ---
     createCampaign(req: CampaignRequest!): CampaignResponse!
     updateCampaign(id: Int!, req: CampaignRequest!): CampaignResponse!
 
+    # --- PUBLICATIONS ---
     createPublication(req: PublicationRequest!): PublicationResponse!
     updatePublication(publicationId: Int!, req: PublicationRequest!): PublicationResponse!
     deletePublication(publicationId: Int!): Boolean!
 
+    # --- TEXT ANALYSIS ---
     createTextAnalysis(req: TextAnalysisRequest!): TextAnalysisResponse!
     updateTextAnalysis(id: Int!, req: TextAnalysisRequest!): TextAnalysisResponse!
 }
 
+# ==========================================
+#               TYPES & INPUTS
+# ==========================================
 
+# --- USER (Nuevo) ---
+type UserResponse {
+    userId: Int
+    fullName: String
+    email: String
+    roleName: String
+    isActive: Boolean
+    creationDate: String
+}
 
+# --- AUTHOR ---
 type AuthorResponse {
     authorId: Int
     username: String
     verified: Boolean
-    followerCount: Int
+    follower: Int       # Corregido de followerCount a follower para coincidir con DTO
     priority: Boolean
 }
 
 input AuthorRequest {
     username: String!
     verified: Boolean!
-    followerCount: Int
+    follower: Int       # Corregido de followerCount a follower
     priority: Boolean!
 }
 
-
-
+# --- CAMPAIGN ---
 type CampaignResponse {
     campaignId: Int
     name: String
@@ -78,6 +90,7 @@ type CampaignResponse {
     endDate: String
     createdAt: String
     updatedAt: String
+    creatorUser: UserResponse # Relación con User
 }
 
 input CampaignRequest {
@@ -86,9 +99,8 @@ input CampaignRequest {
     status: String!
     startDate: String
     endDate: String
+    creatorUserId: Int!       # Nuevo campo obligatorio para vincular usuario
 }
-
-
 
 type CampaignPage {
     content: [CampaignResponse]
@@ -97,8 +109,7 @@ type CampaignPage {
     pageNumber: Int
 }
 
-
-
+# --- PUBLICATION ---
 type PublicationResponse {
     publicationApiId: Int
     textContent: String
@@ -111,7 +122,10 @@ type PublicationResponse {
     classificationPriority: String
     collectionDate: String
 
+    # Relaciones
     textAnalysis: TextAnalysisResponse
+    campaign: CampaignResponse  # Nuevo
+    author: AuthorResponse      # Nuevo
 }
 
 input PublicationRequest {
@@ -123,6 +137,10 @@ input PublicationRequest {
     geolocation: String
     publicationUrl: String
     classificationPriority: String
+    
+    # IDs para relaciones
+    campaignId: Int!  # Nuevo
+    authorId: Int!    # Nuevo
 }
 
 type PublicationPage {
@@ -132,7 +150,7 @@ type PublicationPage {
     pageNumber: Int
 }
 
-
+# --- TEXT ANALYSIS ---
 type TextAnalysisResponse {
     analysisId: Int
     sentiment: String

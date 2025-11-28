@@ -19,7 +19,7 @@ public class Publication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "publication_api_id", length = 50)
-    private Integer  publicationApiId;
+    private Integer publicationApiId;
 
     @Column(name = "text_content", columnDefinition = "TEXT")
     private String textContent;
@@ -52,5 +52,7 @@ public class Publication {
     @JoinColumn(name = "campaign_id")
     private Campaign campaign;
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_api_id", nullable = false)
+    private Author author;
 }

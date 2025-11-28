@@ -38,4 +38,8 @@ public class Campaign {
 
 	@Column(name = "updated_at", columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false)
 	private OffsetDateTime updatedAt;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_user_id", nullable = false)
+    private User creatorUser;
 }

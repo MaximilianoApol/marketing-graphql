@@ -3,9 +3,13 @@ package com.example.marketing.service;
 import com.example.marketing.dto.PublicationRequestDTO;
 import com.example.marketing.dto.PublicationResponseDTO;
 import com.example.marketing.mapper.PublicationMapper;
+import com.example.marketing.model.Author;
+import com.example.marketing.model.Campaign;
 //import com.example.marketing.model.Author;
 //import com.example.marketing.model.Campaign;
 import com.example.marketing.model.Publication;
+import com.example.marketing.repository.AuthorRepository;
+import com.example.marketing.repository.CampaignRepository;
 //import com.example.marketing.repository.AuthorRepository;
 //import com.example.marketing.repository.CampaignRepository;
 import com.example.marketing.repository.PublicationRepository; // ÚNICO repositorio para publicaciones
@@ -28,14 +32,26 @@ import java.util.stream.Collectors;
 public class PublicationServiceImpl implements PublicationService {
 
     private final PublicationRepository publicationRepository;
+    private final CampaignRepository campaignRepository;
+    private final AuthorRepository authorRepository;
 
 
     @Override
     public PublicationResponseDTO create(PublicationRequestDTO request) {
-        Publication newPublication = PublicationMapper.toEntity(request);
+        // 1. Buscar Campaña
+        Campaign campaign = campaignRepository.findById(request.campaignId())
+             .orElseThrow(() -> new EntityNotFoundException("Campaña no encontrada"));
+
+        // 2. Buscar Autor
+        Author author = authorRepository.findById(request.authorId())
+             .orElseThrow(() -> new EntityNotFoundException("Autor no encontrado"));
+
+        // 3. Crear entidad con relaciones
+        Publication newPublication = PublicationMapper.toEntity(request, campaign, author);
         newPublication.setCollectionDate(OffsetDateTime.now());
-        Publication savedPublication = publicationRepository.save(newPublication);
-        return PublicationMapper.toResponseDTO(savedPublication);
+        
+        publicationRepository.save(newPublication);
+        return PublicationMapper.toResponseDTO(newPublication);
     }
 
     @Override
