@@ -9,18 +9,18 @@ import lombok.NoArgsConstructor;
 import java.time.OffsetDateTime;
 
 @Data
-@Builder // <-- ¡Esta es la anotación que faltaba y soluciona el error!
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PublicationResponseDTO {
 
-    @JsonProperty("identifier publication api")
+    @JsonProperty("publicationApiId")
     private Integer publicationApiId;
 
-    @JsonProperty("text content")
+    @JsonProperty("textContent")
     private String textContent;
 
-    @JsonProperty("publication date")
+    @JsonProperty("publicationDate")
     private OffsetDateTime publicationDate;
 
     @JsonProperty("likes")
@@ -32,13 +32,13 @@ public class PublicationResponseDTO {
     @JsonProperty("shares")
     private Integer shares;
 
-    @JsonProperty("publication Url")
+    @JsonProperty("publicationUrl")
     private String publicationUrl;
 
-    @JsonProperty("classification Priority")
+    @JsonProperty("classificationPriority")
     private String classificationPriority;
     
-    @JsonProperty("collection Date")
+    @JsonProperty("collectionDate")
     private OffsetDateTime collectionDate;
 
     @JsonProperty("campaign")
@@ -46,5 +46,4 @@ public class PublicationResponseDTO {
     
     @JsonProperty("author")
     private AuthorResponseDTO author;
-
 }
