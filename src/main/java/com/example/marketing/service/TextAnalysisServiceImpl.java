@@ -28,9 +28,10 @@ public class TextAnalysisServiceImpl implements TextAnalysisService {
     private final PublicationRepository publicationRepo;
 
     @SuppressWarnings("null")
-	@Override
+    @Override
     public TextAnalysisResponseDTO create(TextAnalysisRequestDTO request) {
 
+        @SuppressWarnings("null")
         Publication publication = publicationRepo.findById(request.publicationId())
                 .orElseThrow(() -> new EntityNotFoundException("Publication no encontrada"));
 
@@ -46,9 +47,10 @@ public class TextAnalysisServiceImpl implements TextAnalysisService {
     }
 
     @SuppressWarnings("null")
-	@Override
+    @Override
     public TextAnalysisResponseDTO update(Integer id, TextAnalysisRequestDTO request) {
 
+        @SuppressWarnings("null")
         TextAnalysis existing = repo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("TextAnalysis no encontrado"));
 
@@ -61,7 +63,7 @@ public class TextAnalysisServiceImpl implements TextAnalysisService {
     @Override
     public TextAnalysisResponseDTO findById(Integer id) {
         @SuppressWarnings("null")
-		TextAnalysis entity = repo.findById(id)
+        TextAnalysis entity = repo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("TextAnalysis no encontrado"));
 
         return TextAnalysisMapper.toResponse(entity);
@@ -69,7 +71,7 @@ public class TextAnalysisServiceImpl implements TextAnalysisService {
 
 
     @SuppressWarnings("null")
-	@Override
+    @Override
     public Page<TextAnalysisResponseDTO> findBySentiment(String sentiment, Pageable pageable) {
         List<TextAnalysisResponseDTO> list = repo.findBySentimentOrderByConfidence(sentiment)
                 .stream().map(TextAnalysisMapper::toResponse).toList();
@@ -78,7 +80,7 @@ public class TextAnalysisServiceImpl implements TextAnalysisService {
     }
 
     @SuppressWarnings("null")
-	@Override
+    @Override
     public Page<TextAnalysisResponseDTO> findByCampaign(Integer campaignId, Pageable pageable) {
         List<TextAnalysisResponseDTO> list = repo.findByCampaignId(campaignId)
                 .stream().map(TextAnalysisMapper::toResponse).toList();
@@ -87,7 +89,7 @@ public class TextAnalysisServiceImpl implements TextAnalysisService {
     }
 
     @SuppressWarnings("null")
-	@Override
+    @Override
     public Page<TextAnalysisResponseDTO> findByLanguage(String lang, Pageable pageable) {
         List<TextAnalysisResponseDTO> list = repo.findByLanguage(lang)
                 .stream().map(TextAnalysisMapper::toResponse).toList();
@@ -96,7 +98,7 @@ public class TextAnalysisServiceImpl implements TextAnalysisService {
     }
 
     @SuppressWarnings("null")
-	@Override
+    @Override
     public Page<TextAnalysisResponseDTO> findHighRisk(BigDecimal minScore, Pageable pageable) {
         List<TextAnalysisResponseDTO> list = repo.findHighRiskAnalyses(minScore)
                 .stream().map(TextAnalysisMapper::toResponse).toList();
