@@ -35,28 +35,27 @@ public class PublicationServiceImpl implements PublicationService {
     private final CampaignRepository campaignRepository;
     private final AuthorRepository authorRepository;
 
+    // @Override
+    // @Transactional(readOnly = true)
+    // public PublicationResponseDTO findById(Integer publicationId) {
+    //     @SuppressWarnings("null")
+    //     Publication publication = publicationRepository.findById(publicationId)
+    //             .orElseThrow(() -> new EntityNotFoundException("Publicación no encontrada con ID: " + publicationId));
+    //     return PublicationMapper.toResponseDTO(publication);
+    // }
 
-    @Override
-    @Transactional(readOnly = true)
-    public PublicationResponseDTO findById(Integer publicationId) {
-        @SuppressWarnings("null")
-        Publication publication = publicationRepository.findById(publicationId)
-                .orElseThrow(() -> new EntityNotFoundException("Publicación no encontrada con ID: " + publicationId));
-        return PublicationMapper.toResponseDTO(publication);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<PublicationResponseDTO> findAll() {
-        return publicationRepository.findAll().stream()
-                .map(PublicationMapper::toResponseDTO)
-                .collect(Collectors.toList());
-    }
+    // @Override
+    // @Transactional(readOnly = true)
+    // public List<PublicationResponseDTO> findAll() {
+    //     return publicationRepository.findAll().stream()
+    //             .map(PublicationMapper::toResponseDTO)
+    //             .collect(Collectors.toList());
+    // }
 
     @Override
     @Transactional(readOnly = true)
     public Page<PublicationResponseDTO> getAllPublications(Pageable pageable) {
-        @SuppressWarnings("null")
+        //@SuppressWarnings("null")
         Page<Publication> publicationPage = publicationRepository.findAll(pageable);
         return publicationPage.map(PublicationMapper::toResponseDTO);
     }
@@ -72,11 +71,29 @@ public class PublicationServiceImpl implements PublicationService {
         return PublicationMapper.toResponseDTO(savedPublication);
     }
 
-
     @Override
     public List<PublicationResponseDTO> findPotentialViralContent() {
         OffsetDateTime lastHour = OffsetDateTime.now().minus(1, ChronoUnit.HOURS);
         List<Publication> publications = publicationRepository.findPotentialViralContentJPQL(1000, 100, lastHour);
+        return publications.stream()
+                .map(PublicationMapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PublicationResponseDTO findById(Integer publicationId) {
+        Publication publication = publicationRepository.findByIdWithEagerDetails(publicationId)
+                .orElseThrow(() -> new EntityNotFoundException("Publicación no encontrada con ID: " + publicationId));
+
+        return PublicationMapper.toResponseDTO(publication);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PublicationResponseDTO> findAll() {
+        List<Publication> publications = publicationRepository.findAllWithEagerDetails();
+
         return publications.stream()
                 .map(PublicationMapper::toResponseDTO)
                 .collect(Collectors.toList());

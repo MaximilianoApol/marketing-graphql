@@ -25,7 +25,7 @@ public class SecurityConfiguration {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
                 // Rutas públicas: login, registro y la interfaz de GraphiQL
-                .requestMatchers("/api/auth/**", "/graphiql", "/graphql").permitAll()
+                .requestMatchers("/api/auth/**", "/graphiql", "/graphql","/api/v1/publications/*").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
