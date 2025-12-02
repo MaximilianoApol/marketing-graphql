@@ -25,13 +25,6 @@ public class AuthorServiceImpl implements AuthorService {
 	private final AuthorRepository authorRepository;
 	private final AuthorMapper mapper;
 
-	@SuppressWarnings("null")
-	@Override
-	public AuthorResponseDTO create(AuthorRequestDTO request) {
-		Author entity = mapper.toEntity(request);
-		authorRepository.save(entity);
-		return mapper.toResponse(entity);
-	}
 
 	@SuppressWarnings("null")
 	@Override

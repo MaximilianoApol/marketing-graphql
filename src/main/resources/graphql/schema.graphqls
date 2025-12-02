@@ -32,21 +32,12 @@ type Query {
 }
 
 type Mutation {
-    # --- AUTHORS ---
-    createAuthor(req: AuthorRequest!): AuthorResponse!
     updateAuthor(id: Int!, req: AuthorRequest!): AuthorResponse!
 
-    # --- CAMPAIGNS ---
-    createCampaign(req: CampaignRequest!): CampaignResponse!
     updateCampaign(id: Int!, req: CampaignRequest!): CampaignResponse!
 
-    # --- PUBLICATIONS ---
-    createPublication(req: PublicationRequest!): PublicationResponse!
     updatePublication(publicationId: Int!, req: PublicationRequest!): PublicationResponse!
-    deletePublication(publicationId: Int!): Boolean!
 
-    # --- TEXT ANALYSIS ---
-    createTextAnalysis(req: TextAnalysisRequest!): TextAnalysisResponse!
     updateTextAnalysis(id: Int!, req: TextAnalysisRequest!): TextAnalysisResponse!
 }
 

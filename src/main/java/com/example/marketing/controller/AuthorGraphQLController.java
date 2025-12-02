@@ -55,13 +55,6 @@ public class AuthorGraphQLController {
 		return authorService.findPriorityInfluencers(page, size);
 	}
 
-
-	@MutationMapping(name = "createAuthor")
-	public AuthorResponseDTO createAuthor(@Argument AuthorRequestDTO req) {
-		log.info("GraphQL Mutation → createAuthor(req={})", req);
-		return authorService.create(req);
-	}
-
 	@MutationMapping(name = "updateAuthor")
 	public AuthorResponseDTO updateAuthor(
 			@Argument Integer id,

@@ -9,7 +9,7 @@ public interface AuthorService {
 
 
 
-	AuthorResponseDTO create(AuthorRequestDTO request);
+
 
 	AuthorResponseDTO update(Integer id, AuthorRequestDTO request);
 	//  1. Buscar autor por ID

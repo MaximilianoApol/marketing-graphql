@@ -11,14 +11,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CampaignRepository extends JpaRepository<Campaign, Integer> {
 
-	// Método para buscar por el estado activo, ahora usando la clase Pageable correcta
 	Page<Campaign> findByIsActive(boolean isActive, Pageable pageable);
 
 
-	// CORREGIDO:
-	// 1. Usa c.creationDate en lugar de c.createdAt.
-	// 2. Acepta Pageable como parámetro.
-	// 3. Devuelve Page<Campaign> para manejo nativo de la paginación por Spring Data.
 	@Query("""
     SELECT c
     FROM Campaign c

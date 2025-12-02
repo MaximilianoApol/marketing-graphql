@@ -24,17 +24,6 @@ public class CampaignServiceImpl implements CampaignService {
 
 	@SuppressWarnings("null")
 	@Override
-	public CampaignResponseDTO create(CampaignRequestDTO request) {
-		User creator = userRepository.findById(request.creatorUserId())
-				.orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
-		Campaign entity = CampaignMapper.toEntity(request, creator);
-
-		repository.save(entity);
-		return CampaignMapper.toResponse(entity);
-	}
-
-	@SuppressWarnings("null")
-	@Override
 	public CampaignResponseDTO update(Integer id, CampaignRequestDTO request) {
 		Campaign existing = repository.findById(id)
 				.orElseThrow(() -> new RuntimeException("Campaign not found"));

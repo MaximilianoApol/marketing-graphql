@@ -28,7 +28,7 @@ public class Author {
     @Column(name = "username", nullable = false)
     private String username;
 
-    @Builder.Default // <--- AGREGA ESTA ANOTACIÓN
+    @Builder.Default
     @Column(name = "is_verified", nullable = false)
     private Boolean isVerified = false;
 

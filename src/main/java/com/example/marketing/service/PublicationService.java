@@ -11,7 +11,6 @@ public interface PublicationService {
 
     // --- Métodos CRUD para la gestión de Publicaciones ---
 
-    PublicationResponseDTO create(PublicationRequestDTO request);
 
     PublicationResponseDTO findById(Integer publicationId);
 
@@ -21,7 +20,6 @@ public interface PublicationService {
 
     PublicationResponseDTO update(Integer publicationId, PublicationRequestDTO request);
 
-    void delete(Integer publicationId);
 
     List<PublicationResponseDTO> findPotentialViralContent();
 

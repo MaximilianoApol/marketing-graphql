@@ -13,7 +13,6 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
-import java.time.OffsetDateTime;
 
 @Slf4j
 @Controller
@@ -65,12 +64,6 @@ public class CampaignGraphQLController {
 		return campaignService.findByIsActive(isActive, PageRequest.of(page, size));
 	}
 
-
-	@MutationMapping(name = "createCampaign")
-	public CampaignResponseDTO createCampaign(@Argument CampaignRequestDTO req) {
-		log.info("GraphQL Mutation → createCampaign(req={})", req);
-		return campaignService.create(req);
-	}
 
 	@MutationMapping(name = "updateCampaign")
 	public CampaignResponseDTO updateCampaign(

@@ -37,26 +37,6 @@ public class PublicationServiceImpl implements PublicationService {
 
 
     @Override
-    public PublicationResponseDTO create(PublicationRequestDTO request) {
-        // 1. Buscar Campaña
-        @SuppressWarnings("null")
-        Campaign campaign = campaignRepository.findById(request.campaignId())
-             .orElseThrow(() -> new EntityNotFoundException("Campaña no encontrada"));
-
-        // 2. Buscar Autor
-        @SuppressWarnings("null")
-        Author author = authorRepository.findById(request.authorId())
-             .orElseThrow(() -> new EntityNotFoundException("Autor no encontrado"));
-
-        // 3. Crear entidad con relaciones
-        Publication newPublication = PublicationMapper.toEntity(request, campaign, author);
-        newPublication.setCollectionDate(OffsetDateTime.now());
-        
-        publicationRepository.save(newPublication);
-        return PublicationMapper.toResponseDTO(newPublication);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public PublicationResponseDTO findById(Integer publicationId) {
         @SuppressWarnings("null")
@@ -92,15 +72,6 @@ public class PublicationServiceImpl implements PublicationService {
         return PublicationMapper.toResponseDTO(savedPublication);
     }
 
-    @SuppressWarnings("null")
-    @Override
-    public void delete(Integer publicationId) {
-        if (!publicationRepository.existsById(publicationId)) {
-            throw new EntityNotFoundException(
-                    "No se puede eliminar. Publicación no encontrada con ID: " + publicationId);
-        }
-        publicationRepository.deleteById(publicationId);
-    }
 
     @Override
     public List<PublicationResponseDTO> findPotentialViralContent() {

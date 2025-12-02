@@ -52,12 +52,6 @@ public class PublicationGraphQLController {
     }
 
 
-    @MutationMapping(name = "createPublication")
-    public PublicationResponseDTO createPublication(@Argument PublicationRequestDTO req) {
-        log.info("GraphQL Mutation  createPublication(req={})", req);
-        return publicationService.create(req);
-    }
-
     @MutationMapping(name = "updatePublication")
     public PublicationResponseDTO updatePublication(
             @Argument Integer publicationId,
@@ -67,10 +61,4 @@ public class PublicationGraphQLController {
         return publicationService.update(publicationId, req);
     }
 
-    @MutationMapping(name = "deletePublication")
-    public Boolean deletePublication(@Argument Integer publicationId) {
-        log.info("GraphQL Mutation  deletePublication(id={})", publicationId);
-        publicationService.delete(publicationId);
-        return true;
-    }
 }

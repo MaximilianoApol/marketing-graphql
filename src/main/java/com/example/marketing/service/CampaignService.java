@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface CampaignService {
 
-	CampaignResponseDTO create(CampaignRequestDTO request);
 
 	CampaignResponseDTO update(Integer id, CampaignRequestDTO request);
 
