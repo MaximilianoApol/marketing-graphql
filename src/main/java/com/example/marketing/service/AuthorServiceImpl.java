@@ -26,8 +26,8 @@ public class AuthorServiceImpl implements AuthorService {
 	private final AuthorMapper mapper;
 
 
-	@SuppressWarnings("null")
 	@Override
+	@Transactional
 	public AuthorResponseDTO update(Integer id, AuthorRequestDTO request) {
 		Author existing = authorRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Author no encontrado"));
@@ -38,9 +38,10 @@ public class AuthorServiceImpl implements AuthorService {
 		return mapper.toResponse(existing);
 	}
 
+
 	@Override
+	@Transactional(readOnly = true)
 	public AuthorResponseDTO findById(Integer id) {
-		@SuppressWarnings("null")
 		Author entity = authorRepository.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Author no encontrado"));
 
@@ -58,7 +59,7 @@ public class AuthorServiceImpl implements AuthorService {
 				.findAll(PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "followerCount")))
 				.getContent()
 				.stream()
-				.map(mapper::toResponse)
+				.map(mapper::toResponse)  // ✅ CORRECTO: mapper es inyectado
 				.toList();
 	}
 
@@ -93,5 +94,4 @@ public class AuthorServiceImpl implements AuthorService {
 				.map(mapper::toResponse)
 				.toList();
 	}
-
 }

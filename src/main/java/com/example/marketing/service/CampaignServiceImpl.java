@@ -4,7 +4,6 @@ import com.example.marketing.dto.CampaignRequestDTO;
 import com.example.marketing.dto.CampaignResponseDTO;
 import com.example.marketing.mapper.CampaignMapper;
 import com.example.marketing.model.Campaign;
-import com.example.marketing.model.User;
 import com.example.marketing.repository.CampaignRepository;
 import com.example.marketing.repository.UserRepository;
 
@@ -13,62 +12,64 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CampaignServiceImpl implements CampaignService {
 
 	private final CampaignRepository repository;
-	private final UserRepository userRepository;
+	private final CampaignMapper campaignMapper;
 
-	@SuppressWarnings("null")
 	@Override
 	public CampaignResponseDTO update(Integer id, CampaignRequestDTO request) {
 		Campaign existing = repository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Campaign not found"));
+				.orElseThrow(() -> new EntityNotFoundException("Campaign no encontrado"));
 
-		CampaignMapper.copyToEntity(request, existing);
+		campaignMapper.copyToEntity(request, existing);
 		repository.save(existing);
 
-		return CampaignMapper.toResponse(existing);
+		return campaignMapper.toResponse(existing);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public CampaignResponseDTO getById(Integer id) {
-		@SuppressWarnings("null")
 		Campaign entity = repository.findById(id)
-				.orElseThrow(() -> new RuntimeException("Campaign not found"));
-		return CampaignMapper.toResponse(entity);
+				.orElseThrow(() -> new EntityNotFoundException("Campaign no encontrado"));
+		return campaignMapper.toResponse(entity);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<CampaignResponseDTO> getAll() {
 		return repository.findAll()
 				.stream()
-				.map(CampaignMapper::toResponse)
+				.map(campaignMapper::toResponse)
 				.toList();
 	}
 
-
-	@SuppressWarnings("null")
 	@Override
+	@Transactional(readOnly = true)
 	public Page<CampaignResponseDTO> getAllPaged(Pageable pageable) {
 		return repository.findAll(pageable)
-				.map(CampaignMapper::toResponse);
+				.map(campaignMapper::toResponse);
 	}
 
-	@SuppressWarnings("null")
 	@Override
+	@Transactional(readOnly = true)
 	public Page<CampaignResponseDTO> searchByName(String name, Pageable pageable) {
 		return repository.searchByName(name, pageable)
-				.map(CampaignMapper::toResponse);
+				.map(campaignMapper::toResponse);
 	}
 
-	@SuppressWarnings("null")
 	@Override
+	@Transactional(readOnly = true)
 	public Page<CampaignResponseDTO> findByIsActive(boolean isActive, Pageable pageable) {
 		return repository.findByIsActive(isActive, pageable)
-				.map(CampaignMapper::toResponse);
+				.map(campaignMapper::toResponse);
 	}
 }

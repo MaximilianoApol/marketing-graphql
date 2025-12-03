@@ -32,6 +32,9 @@ public class PublicationResponseDTO {
     @JsonProperty("shares")
     private Integer shares;
 
+    @JsonProperty("geolocation")
+    private String geolocation;
+
     @JsonProperty("publicationUrl")
     private String publicationUrl;
 

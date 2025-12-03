@@ -3,16 +3,10 @@ package com.example.marketing.service;
 import com.example.marketing.dto.PublicationRequestDTO;
 import com.example.marketing.dto.PublicationResponseDTO;
 import com.example.marketing.mapper.PublicationMapper;
-import com.example.marketing.model.Author;
-import com.example.marketing.model.Campaign;
-//import com.example.marketing.model.Author;
-//import com.example.marketing.model.Campaign;
 import com.example.marketing.model.Publication;
 import com.example.marketing.repository.AuthorRepository;
 import com.example.marketing.repository.CampaignRepository;
-//import com.example.marketing.repository.AuthorRepository;
-//import com.example.marketing.repository.CampaignRepository;
-import com.example.marketing.repository.PublicationRepository; // ÚNICO repositorio para publicaciones
+import com.example.marketing.repository.PublicationRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,51 +28,8 @@ public class PublicationServiceImpl implements PublicationService {
     private final PublicationRepository publicationRepository;
     private final CampaignRepository campaignRepository;
     private final AuthorRepository authorRepository;
+    private final PublicationMapper publicationMapper;
 
-    // @Override
-    // @Transactional(readOnly = true)
-    // public PublicationResponseDTO findById(Integer publicationId) {
-    //     @SuppressWarnings("null")
-    //     Publication publication = publicationRepository.findById(publicationId)
-    //             .orElseThrow(() -> new EntityNotFoundException("Publicación no encontrada con ID: " + publicationId));
-    //     return PublicationMapper.toResponseDTO(publication);
-    // }
-
-    // @Override
-    // @Transactional(readOnly = true)
-    // public List<PublicationResponseDTO> findAll() {
-    //     return publicationRepository.findAll().stream()
-    //             .map(PublicationMapper::toResponseDTO)
-    //             .collect(Collectors.toList());
-    // }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<PublicationResponseDTO> getAllPublications(Pageable pageable) {
-        //@SuppressWarnings("null")
-        Page<Publication> publicationPage = publicationRepository.findAll(pageable);
-        return publicationPage.map(PublicationMapper::toResponseDTO);
-    }
-
-    @Override
-    public PublicationResponseDTO update(Integer publicationId, PublicationRequestDTO request) {
-        @SuppressWarnings("null")
-        Publication existingPublication = publicationRepository.findById(publicationId)
-                .orElseThrow(() -> new EntityNotFoundException("Publicación no encontrada con ID: " + publicationId));
-        PublicationMapper.copyToEntity(request, existingPublication);
-        @SuppressWarnings("null")
-        Publication savedPublication = publicationRepository.save(existingPublication);
-        return PublicationMapper.toResponseDTO(savedPublication);
-    }
-
-    @Override
-    public List<PublicationResponseDTO> findPotentialViralContent() {
-        OffsetDateTime lastHour = OffsetDateTime.now().minus(1, ChronoUnit.HOURS);
-        List<Publication> publications = publicationRepository.findPotentialViralContentJPQL(1000, 100, lastHour);
-        return publications.stream()
-                .map(PublicationMapper::toResponseDTO)
-                .collect(Collectors.toList());
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -86,8 +37,9 @@ public class PublicationServiceImpl implements PublicationService {
         Publication publication = publicationRepository.findByIdWithEagerDetails(publicationId)
                 .orElseThrow(() -> new EntityNotFoundException("Publicación no encontrada con ID: " + publicationId));
 
-        return PublicationMapper.toResponseDTO(publication);
+        return publicationMapper.toResponseDTO(publication);
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -95,8 +47,40 @@ public class PublicationServiceImpl implements PublicationService {
         List<Publication> publications = publicationRepository.findAllWithEagerDetails();
 
         return publications.stream()
-                .map(PublicationMapper::toResponseDTO)
+                .map(publicationMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PublicationResponseDTO> getAllPublications(Pageable pageable) {
+        Page<Publication> publicationPage = publicationRepository.findAll(pageable);
+        return publicationPage.map(publicationMapper::toResponseDTO);
+    }
+
+
+    @Override
+    @Transactional
+    public PublicationResponseDTO update(Integer publicationId, PublicationRequestDTO request) {
+        Publication existingPublication = publicationRepository.findById(publicationId)
+                .orElseThrow(() -> new EntityNotFoundException("Publicación no encontrada con ID: " + publicationId));
+
+        publicationMapper.copyToEntity(request, existingPublication);
+        Publication savedPublication = publicationRepository.save(existingPublication);
+
+        return publicationMapper.toResponseDTO(savedPublication);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PublicationResponseDTO> findPotentialViralContent() {
+        OffsetDateTime lastHour = OffsetDateTime.now().minus(1, ChronoUnit.HOURS);
+        List<Publication> publications = publicationRepository
+                .findPotentialViralContentJPQL(1000, 100, lastHour);
+
+        return publications.stream()
+                .map(publicationMapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
 }

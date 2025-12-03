@@ -23,42 +23,39 @@ public class PublicationGraphQLController {
 
     private final PublicationService publicationService;
 
-
-    @QueryMapping(name = "find Publication ById")
+    @QueryMapping(name = "findPublicationById")
     public PublicationResponseDTO findPublicationById(@Argument Integer id) {
         log.info("GraphQL Query → findPublicationById(id={})", id);
         return publicationService.findById(id);
     }
 
-    @QueryMapping(name = "find All Publications")
+    @QueryMapping(name = "findAllPublications")
     public List<PublicationResponseDTO> findAllPublications() {
-        log.info("GraphQL Query  findAllPublications");
+        log.info("GraphQL Query → findAllPublications");
         return publicationService.findAll();
     }
 
-    @QueryMapping(name = "get All Publications Paged")
+    @QueryMapping(name = "getAllPublicationsPaged")
     public Page<PublicationResponseDTO> getAllPublicationsPaged(
             @Argument int page,
             @Argument int size
     ) {
-        log.info("GraphQL Query  get All Publications Paged(page={}, size={})", page, size);
+        log.info("GraphQL Query → getAllPublicationsPaged(page={}, size={})", page, size);
         return publicationService.getAllPublications(PageRequest.of(page, size));
     }
 
-    @QueryMapping(name = "find Potential Viral Content")
+    @QueryMapping(name = "findPotentialViralContent")
     public List<PublicationResponseDTO> findPotentialViralContent() {
-        log.info("GraphQL Query  findPotentialViralContent");
+        log.info("GraphQL Query → findPotentialViralContent");
         return publicationService.findPotentialViralContent();
     }
-
 
     @MutationMapping(name = "updatePublication")
     public PublicationResponseDTO updatePublication(
             @Argument Integer publicationId,
             @Argument PublicationRequestDTO req
     ) {
-        log.info("GraphQL Mutation  updatePublication(id={}, req={})", publicationId, req);
+        log.info("GraphQL Mutation → updatePublication(id={}, req={})", publicationId, req);
         return publicationService.update(publicationId, req);
     }
-
 }

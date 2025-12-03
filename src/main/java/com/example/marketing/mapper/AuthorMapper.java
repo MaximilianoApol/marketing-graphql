@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 @Component
 public class AuthorMapper {
 
+
 	public AuthorResponseDTO toResponse(Author entity) {
 		if (entity == null) return null;
 
@@ -23,6 +24,7 @@ public class AuthorMapper {
 				.build();
 	}
 
+
 	public Author toEntity(AuthorRequestDTO request) {
 		if (request == null) return null;
 
@@ -34,6 +36,7 @@ public class AuthorMapper {
 				.firstRegistrationDate(OffsetDateTime.now())
 				.build();
 	}
+
 
 	public void copyToEntity(AuthorRequestDTO request, Author existing) {
 		if (request == null || existing == null) return;

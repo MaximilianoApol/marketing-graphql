@@ -9,7 +9,6 @@ import java.util.List;
 
 public interface PublicationService {
 
-    // --- Métodos CRUD para la gestión de Publicaciones ---
 
 
     PublicationResponseDTO findById(Integer publicationId);

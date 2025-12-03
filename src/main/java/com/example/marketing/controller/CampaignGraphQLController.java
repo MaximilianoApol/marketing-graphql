@@ -12,7 +12,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
-
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -21,7 +21,6 @@ public class CampaignGraphQLController {
 
 	private final CampaignService campaignService;
 
-
 	@QueryMapping(name = "getCampaignById")
 	public CampaignResponseDTO getCampaignById(@Argument Integer id) {
 		log.info("GraphQL Query → getCampaignById(id={})", id);
@@ -29,7 +28,7 @@ public class CampaignGraphQLController {
 	}
 
 	@QueryMapping(name = "getAllCampaigns")
-	public Iterable<CampaignResponseDTO> getAllCampaigns() {
+	public List<CampaignResponseDTO> getAllCampaigns() {
 		log.info("GraphQL Query → getAllCampaigns");
 		return campaignService.getAll();
 	}
@@ -55,15 +54,13 @@ public class CampaignGraphQLController {
 
 	@QueryMapping(name = "findActiveCampaigns")
 	public Page<CampaignResponseDTO> findActiveCampaigns(
-			@Argument boolean isActive, // CORREGIDO: Ahora recibe un booleano (isActive)
+			@Argument boolean isActive,
 			@Argument int page,
 			@Argument int size
 	) {
 		log.info("GraphQL Query → findActiveCampaigns(isActive={}, page={}, size={})", isActive, page, size);
-		// Llama al nuevo método del servicio
 		return campaignService.findByIsActive(isActive, PageRequest.of(page, size));
 	}
-
 
 	@MutationMapping(name = "updateCampaign")
 	public CampaignResponseDTO updateCampaign(

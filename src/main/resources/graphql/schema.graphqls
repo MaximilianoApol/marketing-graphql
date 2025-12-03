@@ -4,48 +4,34 @@ schema {
 }
 
 type Query {
-    # --- AUTHORS ---
+
     getAuthorById(id: Int!): AuthorResponse
     getAuthorsOrderByFollowers(page: Int!, size: Int!): [AuthorResponse]
     getVerifiedAuthors(page: Int!, size: Int!): [AuthorResponse]
     getPriorityInfluencers(page: Int!, size: Int!): [AuthorResponse]
 
-    # --- CAMPAIGNS ---
+
     getCampaignById(id: Int!): CampaignResponse
     getAllCampaigns: [CampaignResponse]
     getCampaignsPaged(page: Int!, size: Int!): CampaignPage
     searchCampaignByName(name: String!, page: Int!, size: Int!): CampaignPage
     findActiveCampaigns(isActive: Boolean!, page: Int!, size: Int!): CampaignPage
 
-    # --- PUBLICATIONS ---
+
     findPublicationById(id: Int!): PublicationResponse
     findAllPublications: [PublicationResponse]
     getAllPublicationsPaged(page: Int!, size: Int!): PublicationPage
     findPotentialViralContent: [PublicationResponse]
 
-    # --- TEXT ANALYSIS ---
-    getTextAnalysisById(id: Int!): TextAnalysisResponse
-    findTextAnalysisBySentiment(sentiment: String!, page: Int!, size: Int!): TextAnalysisPage
-    findTextAnalysisByCampaign(campaignId: Int!, page: Int!, size: Int!): TextAnalysisPage
-    findTextAnalysisByLanguage(language: String!, page: Int!, size: Int!): TextAnalysisPage
-    findHighRiskTextAnalysis(minScore: Float!, page: Int!, size: Int!): TextAnalysisPage
 }
 
 type Mutation {
     updateAuthor(id: Int!, req: AuthorRequest!): AuthorResponse!
-
     updateCampaign(id: Int!, req: CampaignRequest!): CampaignResponse!
-
     updatePublication(publicationId: Int!, req: PublicationRequest!): PublicationResponse!
-
-    updateTextAnalysis(id: Int!, req: TextAnalysisRequest!): TextAnalysisResponse!
 }
 
-# ==========================================
-#               TYPES & INPUTS
-# ==========================================
 
-# --- USER (Nuevo) ---
 type UserResponse {
     userId: Int
     fullName: String
@@ -55,23 +41,24 @@ type UserResponse {
     creationDate: String
 }
 
-# --- AUTHOR ---
+
 type AuthorResponse {
     authorId: Int
     username: String
     verified: Boolean
-    follower: Int       # Corregido de followerCount a follower para coincidir con DTO
+    follower: Int
     priority: Boolean
+    firstRegistrationDate: String
 }
 
 input AuthorRequest {
-    username: String!
-    verified: Boolean!
-    follower: Int       # Corregido de followerCount a follower
-    priority: Boolean!
+    username: String
+    verified: Boolean
+    follower: Int
+    priority: Boolean
 }
 
-# --- CAMPAIGN ---
+
 type CampaignResponse {
     campaignId: Int
     name: String
@@ -87,13 +74,14 @@ input CampaignRequest {
 }
 
 type CampaignPage {
-    content: [CampaignResponse]
-    totalElements: Int
-    totalPages: Int
-    pageNumber: Int
+    content: [CampaignResponse!]!
+    totalElements: Int!
+    totalPages: Int!
+    number: Int!
+    size: Int!
 }
 
-# --- PUBLICATION ---
+
 type PublicationResponse {
     publicationApiId: Int
     textContent: String
@@ -105,11 +93,8 @@ type PublicationResponse {
     publicationUrl: String
     classificationPriority: String
     collectionDate: String
-
-    # Relaciones
-    textAnalysis: TextAnalysisResponse
-    campaign: CampaignResponse  # Nuevo
-    author: AuthorResponse      # Nuevo
+    campaign: CampaignResponse
+    author: AuthorResponse
 }
 
 input PublicationRequest {
@@ -121,46 +106,14 @@ input PublicationRequest {
     geolocation: String
     publicationUrl: String
     classificationPriority: String
-    
-    # IDs para relaciones
-    campaignId: Int!  # Nuevo
-    authorId: Int!    # Nuevo
+    campaignId: Int!
+    authorId: Int!
 }
 
 type PublicationPage {
-    content: [PublicationResponse]
-    totalElements: Int
-    totalPages: Int
-    pageNumber: Int
-}
-
-# --- TEXT ANALYSIS ---
-type TextAnalysisResponse {
-    analysisId: Int
-    sentiment: String
-    sentimentScore: Float
-    keywords: [String]
-    entities: [String]
-    toxicityLevel: String
-    language: String
-    campaignId: Int
-    publicationId: Int
-}
-
-input TextAnalysisRequest {
-    sentiment: String
-    sentimentScore: Float
-    keywords: [String]
-    entities: [String]
-    toxicityLevel: String
-    language: String
-    campaignId: Int
-    publicationId: Int!
-}
-
-type TextAnalysisPage {
-    content: [TextAnalysisResponse]
-    totalElements: Int
-    totalPages: Int
-    pageNumber: Int
+    content: [PublicationResponse!]!
+    totalElements: Int!
+    totalPages: Int!
+    number: Int!
+    size: Int!
 }
